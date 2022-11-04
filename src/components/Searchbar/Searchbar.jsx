@@ -4,7 +4,7 @@ import { BiSearch } from 'react-icons/bi'
 
 export class Searchbar extends Component {
     state = {
-        query: '',
+      query: '',
     }
 
     handleQueryChange = e => {

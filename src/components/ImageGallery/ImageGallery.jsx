@@ -1,8 +1,9 @@
 import { Component } from "react";
 import { ThreeDots } from 'react-loader-spinner';
 // import axios from "axios";
-import imagesApi from '../../helpers/images-api'
+import API from '../../helpers/images-api'
 import { ImageGalleryItem } from "./ImageGalleryItem/ImageGalleryItem";
+import {Button} from "./Button/Button";
 
 export class ImageGallery extends Component {
     state = {
@@ -11,15 +12,18 @@ export class ImageGallery extends Component {
         status: 'igle',
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        const prevName = prevProps.query;
-        const nextName = this.props.query;
+    componentDidUpdate(prevProps, _) {
+        const prevQuery = prevProps.query;
+        const nextQuery = this.props.query;
+        const prevPage = prevProps.page;
+        const nextPage = this.props.page;
 
-        if (prevName !== nextName) {
+        if (prevQuery !== nextQuery ||
+            prevPage !== nextPage) {
             this.setState({ status: 'pending' });
 
-            imagesApi
-                .fetchImages(nextName)
+            API
+                .fetchImages(nextQuery)
                 .then(fetchImages => this.setState({ images: fetchImages.hits, status: 'resolved' }))
                 .catch(error => this.setState({ error, status: 'rejected' }));
         }
@@ -51,6 +55,7 @@ export class ImageGallery extends Component {
 
         if (status === 'resolved') {
             return (
+                <>
                     <ul className="ImageGallery">
                         {images.map(image =>
                             <ImageGalleryItem
@@ -60,6 +65,9 @@ export class ImageGallery extends Component {
                                 infoImage={image.tags} />
                         )}
                     </ul>
+                
+                    <Button onClick={this.props.onClickBtn}>Load more</Button>
+                </>    
             );
         };
     };
