@@ -53,7 +53,11 @@ export class ImageGallery extends Component {
             return (
                     <ul className="ImageGallery">
                         {images.map(image =>
-                            <ImageGalleryItem key={image.id} smallImage={image.webformatURL} infoImage={image.tags} />
+                            <ImageGalleryItem
+                                key={image.id}
+                                smallImage={image.webformatURL}
+                                largeImage={image.largeImageURL}
+                                infoImage={image.tags} />
                         )}
                     </ul>
             );
