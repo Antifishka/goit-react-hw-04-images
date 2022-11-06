@@ -3,7 +3,8 @@ import { ThreeDots } from 'react-loader-spinner';
 // import axios from "axios";
 import API from '../../helpers/images-api'
 import { ImageGalleryItem } from "./ImageGalleryItem/ImageGalleryItem";
-import {Button} from "./Button/Button";
+import { Button } from "./Button/Button";
+import { IgleGallery } from "./ImageGallery.styled";
 
 export class ImageGallery extends Component {
     state = {
@@ -12,29 +13,37 @@ export class ImageGallery extends Component {
         status: 'igle',
     };
 
-    componentDidUpdate(prevProps, _) {
-        const prevQuery = prevProps.query;
-        const nextQuery = this.props.query;
-        const prevPage = prevProps.page;
-        const nextPage = this.props.page;
+    async componentDidUpdate(prevProps, _) {
+        try {
+            const prevQuery = prevProps.query;
+            const nextQuery = this.props.query;
+            const prevPage = prevProps.page;
+            const nextPage = this.props.page;
 
-        if (prevQuery !== nextQuery ||
-            prevPage !== nextPage) {
-            this.setState({ status: 'pending' });
+            if (prevQuery !== nextQuery ||
+                prevPage !== nextPage) {
+                this.setState({ status: 'pending' });
 
-            API
-                .fetchImages(nextQuery)
-                .then(fetchImages => this.setState({ images: fetchImages.hits, status: 'resolved' }))
-                .catch(error => this.setState({ error, status: 'rejected' }));
+                const fetchImages = await API.fetchImages(nextQuery, nextPage);
+                console.log(fetchImages);
+
+                this.setState(state => ({
+                    images: [...state.images, fetchImages],
+                    status: 'resolved',
+                }))
+            }
+        } catch (error) {
+            console.log(error);
+            this.setState({ status: 'rejected' });
         }
     }
-
+    
     render() {
         const { images, status } = this.state;
         console.log({ images });
 
         if (status === 'igle') {
-            return <div>Введите запрос</div>
+            return <IgleGallery>Enter your query in the search bar</IgleGallery>
         }
 
         if (status === 'pending') {

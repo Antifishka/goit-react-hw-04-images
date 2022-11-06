@@ -15,7 +15,7 @@ export class Searchbar extends Component {
         e.preventDefault();
     
         if (this.state.query.trim() === '') {
-            return toast('Enter your query in the search bar');
+            return toast.warn('Enter your query in the search bar!');
         };    
 
         this.props.onSubmit(this.state.query);
