@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
+import css from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
 
@@ -31,8 +32,8 @@ export class Modal extends Component{
 
     render() {
         return createPortal( // рендерим разметку в другой корень id="modal-root"
-        <div className="Overlay" onClick={this.handleBackdropClick}>
-            <div className="Modal">
+        <div className={css.Overlay} onClick={this.handleBackdropClick}>
+            <div className={css.Modal}>
             {this.props.children}
             </div>
         </div>,
@@ -42,6 +43,6 @@ export class Modal extends Component{
 }
 
 Modal.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.node,
 }
 

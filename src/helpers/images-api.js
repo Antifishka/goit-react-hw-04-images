@@ -24,7 +24,7 @@ async function fetchImages(query, page) {
         if (!images.length) {
             throw new Error(`Images not found...`)
         }
-    return images;
+    return data;
 } 
 
 const api = {
