@@ -2,6 +2,7 @@ import { Component } from "react";
 import { toast } from 'react-toastify';
 import { BiSearch } from 'react-icons/bi';
 import css from './Searchbar.module.css';
+import PropTypes from 'prop-types';
 
 export class Searchbar extends Component {
     state = {
@@ -46,3 +47,7 @@ export class Searchbar extends Component {
     );
     };
 };
+
+Searchbar.propsType = {
+  onSubmit: PropTypes.func.isRequired,
+}
