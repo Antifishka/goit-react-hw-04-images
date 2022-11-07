@@ -21,9 +21,10 @@ async function fetchImages(query, page) {
         // const totalHits = data.totalHits;
         // const totalPages = totalHits / this.per_page;
 
-        if (!images.length) {
-            throw new Error(`Images not found...`)
-        }
+    if (!images.length) {
+        throw new Error(`Sorry, there are no images matching your search query. Please try again.`)
+    }
+    
     return data;
 } 
 

@@ -8,6 +8,7 @@ import { Searchbar } from "./Searchbar/Searchbar";
 import { Loader } from "./Loader/Loader";
 import { Button } from "./Button/Button";
 import css from './App.module.css';
+import { toast } from 'react-toastify';
 
 const STATUS = {
   idle: 'idle',
@@ -21,6 +22,7 @@ export class App extends Component{
     page: 1,
     query: '',
     images: [],
+    error: null,
     loadBtnIsShown: false,
     status: STATUS.idle,
   }
@@ -43,9 +45,17 @@ export class App extends Component{
           status: STATUS.resolved,
           loadBtnIsShown: true,
         }))
+
+        const totalPages = this.calculateTotalPages(fetchImages);
+        console.log(nextPage);
+        console.log(totalPages);
+        if (nextPage > totalPages) {
+          this.setState({ loadBtnIsShown: false });
+            return toast.warn("We're sorry, but you've reached the end of search results.");
+        }
+
       } catch (error) {
-        console.log(error);
-        this.setState({ status: STATUS.rejected });
+        this.setState({ error, status: STATUS.rejected });
       }
     }
   };
@@ -66,8 +76,13 @@ export class App extends Component{
     }));
   };
 
+  calculateTotalPages = (fetchImages) => {
+    const totalHits = fetchImages.totalHits;
+    return Math.ceil(totalHits / 12);
+  }
+    
   render() {
-    const { images, status, loadBtnIsShown } = this.state; 
+    const { images, status, error, loadBtnIsShown } = this.state; 
 
     return (
       <div className={css.App}>
@@ -75,14 +90,14 @@ export class App extends Component{
         <Searchbar onSubmit={this.handleFormSubmit} />
 
         {status === 'idle' && (
-          <p className={css.IgleText}>Please, enter your request</p>
+          <p className={css.MessageText}>Please, enter your request</p>
         )}
 
         {status === 'pending' && <Loader />}
         
-        {status === 'rejected' && <div>Sorry, there are no images matching your search query. Please try again.</div>}
+        {status === 'rejected' && <div className={css.MessageText}>{error.message}</div>}
 
-        {status === 'resolved' && (
+        {(status === 'pending' || status === 'resolved') && (
           <ImageGallery images={images} />
         )}  
 
