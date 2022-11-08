@@ -47,9 +47,9 @@ export class App extends Component{
         }))
 
         const totalPages = this.calculateTotalPages(fetchImages);
-        console.log(nextPage);
-        console.log(totalPages);
-        if (nextPage > totalPages) {
+        console.log(`Текущая страница`, nextPage);
+        console.log(`Общее кол-во страниц`, totalPages);
+        if ((nextPage > totalPages) || (nextPage === totalPages)) {
           this.setState({ showLoadBtn: false });
           return toast.warn("We're sorry, but you've reached the end of search results.");
         }
