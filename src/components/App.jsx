@@ -97,7 +97,7 @@ export function ImageFinder() {
         <>
           <ImageGallery images={images} />
 
-          {page !==1 && !showLoadBtn && <Loader />}
+          {page !==1 && !showLoadBtn && status === Status.PENDING && <Loader />}
             
           {showLoadBtn && (
             <Button onClick={onLoadMoreBtnClick}>Load More</Button>)}
@@ -108,106 +108,3 @@ export function ImageFinder() {
     </div>
   );
 }
-
-// export class OldApp extends Component{
-//   state = {
-//     page: 1,
-//     query: '',
-//     images: [],
-//     error: null,
-//     showLoadBtn: false,
-//     status: STATUS.idle,
-//   }
-
-//   async componentDidUpdate(_, prevState) {
-//     const prevQuery = prevState.query;
-//     const nextQuery = this.state.query;
-//     const prevPage = prevState.page;
-//     const nextPage = this.state.page;
-
-//     if (prevQuery !== nextQuery || prevPage !== nextPage) {
-//       this.setState({ status: 'pending', showLoadBtn: false });
-
-//       try {
-//         const fetchImages = await API.fetchImages(nextQuery, nextPage);
-//         console.log(fetchImages);
-
-//         this.setState(prevState => ({
-//           images: [...prevState.images, ...fetchImages.hits],
-//           status: 'resolved',
-//           showLoadBtn: true,
-//         }))
-
-//         const totalPages = this.calculateTotalPages(fetchImages);
-//         console.log(`Текущая страница`, nextPage);
-//         console.log(`Общее кол-во страниц`, totalPages);
-//         if ((nextPage > totalPages) || (nextPage === totalPages)) {
-//           this.setState({ showLoadBtn: false });
-//           return toast.warn("We're sorry, but you've reached the end of search results.");
-//         }
-
-//       } catch (error) {
-//         this.setState({ error, status: 'rejected' });
-//       }
-//     }
-//   };
-  
-//   handleFormSubmit = query => {
-//     console.log(query);
-
-//     this.setState({
-//       query,
-//       images: [],
-//       page: 1,
-//     });
-//   }
-
-//   onLoadMoreBtnClick = (e)=> {
-//     this.setState(prevState => ({
-//       page: prevState.page + 1,
-//       status: 'pending',
-//     }));
-//   };
-
-//   calculateTotalPages = (fetchImages) => {
-//     const totalHits = fetchImages.totalHits;
-//     return Math.ceil(totalHits / 12);
-//   }
-    
-//   render() {
-//     const { images, status, error, showLoadBtn } = this.state; 
-
-//     return (
-//       <div className={css.App}>
-//         <GlobalStyle />
-//         <Searchbar onSubmit={this.handleFormSubmit} />
-
-//         {status === 'idle' && (
-//           <p className={css.MessageText}>Please, enter your request</p>
-//         )}
-
-//         {status === 'pending' && (
-//           <>
-//             <Loader />
-
-//             {showLoadBtn && (
-//                 <Button onClick={this.onLoadMoreBtnClick}>Load More</Button>)}
-//           </>  
-//         )}
-        
-//         {status === 'rejected' && <div className={css.MessageText}>{error.message}</div>}
-
-//         {(status === 'pending' || status === 'resolved') && (
-//           <>
-//             <ImageGallery images={images} />
-            
-//             {showLoadBtn && (
-//               <Button onClick={this.onLoadMoreBtnClick}>Load More</Button>)}
-//           </>  
-//         )}
-
-//         <ToastContainer autoClose={2500} theme="colored"/>
-//       </div>
-//     );
-//   };
-// }
